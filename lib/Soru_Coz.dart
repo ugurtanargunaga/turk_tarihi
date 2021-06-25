@@ -1,5 +1,8 @@
+import 'package:buyukturktarihi_app/Kullanici_Giris/SignInPage.dart';
 import 'package:buyukturktarihi_app/Sorular_ve_Cevaplar.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_signin_button/button_builder.dart';
 
 class Soru_Coz extends StatefulWidget {
   @override
@@ -7,7 +10,10 @@ class Soru_Coz extends StatefulWidget {
 }
 
 class _Soru_CozState extends State<Soru_Coz> {
-  String username;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -31,62 +37,29 @@ class _Soru_CozState extends State<Soru_Coz> {
                   fontSize: 15.0,
                 ),
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Form(
-                      key: _formKey, //yukarıdaki forma formkey ile ulaşabilirim
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.purple),
-                          ),
-                          labelText: 'İsminizi Giriniz',
-                        ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Kullanıcı Adını Giriniz";
-                          } else {
-                            return null; //validate işlemi bitti. kullanıcı değerleri vs girdi.
-                          }
-                        },
-                        onSaved: (deger) {
-                          username = deger;
-                        },
-                      ),
+              Container(
+                child: SignInButtonBuilder(
+                  icon: Icons.verified_user,
+                  backgroundColor: Colors.orange,
+                  text: 'E-Mail İle Giriş Yap',
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      FirebaseAuth.instance.currentUser == null
+                          ? SignInPage() //kayıtlı kullanıcı yoksa signinpage'e gönder
+                          : Sorular_ve_Cevaplar(),//giriş yaptıysa anasayfaya gönder.
                     ),
                   ),
-                  Column(
-                    children: [
-                      _GirisButonu(),
-                    ],
-                  )
-                ],
-              )
+                ),
+                padding: const EdgeInsets.all(16.0),
+                alignment: Alignment.center,
+              ),
+
             ],
           ),
+
         ),
       ),
     );
   }
-
-  Widget _GirisButonu() => ElevatedButton(
-      child: Text('Giriş Yap'),
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          //if içindeki değer true şekilde bittiyse
-          _formKey.currentState.save();
-          //debugPrint('Kullanıcı Adı : $username');
-          /*if(username==username){
-            debugPrint('Giriş Başarılı');
-          }*/
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Sorular_ve_Cevaplar(username: username,),
-            ),
-          );
-        }
-      });
 }

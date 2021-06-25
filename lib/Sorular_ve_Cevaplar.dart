@@ -89,10 +89,10 @@ class _Sorular_ve_CevaplarState extends State<Sorular_ve_Cevaplar> {
     }
     else {
       if (mevcutcevap == sorular[mevcutsoru]['dogrucevap']) {
-        puan = puan+10;
+        puan = puan+100;
         mevcutsoru++;
       } else {
-        puan = puan-10;
+        puan = puan-100;
         mevcutsoru++;
       }
     }

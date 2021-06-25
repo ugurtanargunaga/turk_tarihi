@@ -50,6 +50,7 @@ class _OnAlti_Turk_DevletiState extends State<OnAlti_Turk_Devleti> {
                 ),
               ),
             ),
+            /////////////////////////////////////////////////////////////////////////bölüm
             Container(
               margin: EdgeInsets.all(10),
               height: 220,
